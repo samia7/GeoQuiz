@@ -27,6 +27,7 @@ public class QuizActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex=0;
+    private int mNewIndex=0;
 
     @Override
     public void onStart(){
@@ -52,6 +53,8 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick (View v){
                 checkAnswer(true);
+                v.setEnabled(false);
+                mFalseButton.setEnabled(false);
             }
         });
 
@@ -60,6 +63,8 @@ public class QuizActivity extends AppCompatActivity {
             @Override
             public void onClick (View v){
                 checkAnswer(false);
+                v.setEnabled(false);
+                mTrueButton.setEnabled(false);
             }
         });
 
@@ -69,6 +74,8 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick (View v){
                 mCurrentIndex=(mCurrentIndex+1)% mQuestionBank.length;
                 updateQuestion();
+                mTrueButton.setEnabled(true);
+                mFalseButton.setEnabled(true);
             }
         });
     }
