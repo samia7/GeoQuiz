@@ -1,5 +1,6 @@
 package geoquiz.android.bignerdranch.com.geoquiz;
 
+import android.icu.text.DecimalFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -7,6 +8,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import static android.widget.Toast.LENGTH_SHORT;
 
 public class QuizActivity extends AppCompatActivity {
 
@@ -27,7 +30,7 @@ public class QuizActivity extends AppCompatActivity {
     };
 
     private int mCurrentIndex=0;
-    private int mNewIndex=0;
+    private int mCorrectAnsCount=0;
 
     @Override
     public void onStart(){
@@ -74,8 +77,16 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick (View v){
                 mCurrentIndex=(mCurrentIndex+1)% mQuestionBank.length;
                 updateQuestion();
-                mTrueButton.setEnabled(true);
+
+                if(mCurrentIndex==(mQuestionBank.length-1) && !mTrueButton.isEnabled() ) {
+                    double score=(mCorrectAnsCount/(double)mQuestionBank.length)*100;
+                    String mScore = String.valueOf((mCorrectAnsCount/(double)mQuestionBank.length)*100);
+                    Toast.makeText(getApplicationContext(), mScore, Toast.LENGTH_SHORT).show();
+                    mCorrectAnsCount=0;
+                }
+
                 mFalseButton.setEnabled(true);
+                mTrueButton.setEnabled(true);
             }
         });
     }
@@ -123,12 +134,14 @@ public class QuizActivity extends AppCompatActivity {
 
         int messageResId=0;
 
-        if (userPressedTrue==answerIsTrue)
-            messageResId=R.string.correct_toast;
+        if (userPressedTrue==answerIsTrue) {
+            messageResId = R.string.correct_toast;
+            mCorrectAnsCount++;
+        }
         else
             messageResId=R.string.incorrect_toast;
 
-        Toast.makeText(this,messageResId,Toast.LENGTH_SHORT).show();
+        Toast.makeText(this,messageResId, LENGTH_SHORT).show();
     }
 
 }
