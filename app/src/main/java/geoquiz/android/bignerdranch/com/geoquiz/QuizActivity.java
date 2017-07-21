@@ -1,6 +1,5 @@
 package geoquiz.android.bignerdranch.com.geoquiz;
 
-import android.icu.text.DecimalFormat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -58,6 +57,9 @@ public class QuizActivity extends AppCompatActivity {
                 checkAnswer(true);
                 v.setEnabled(false);
                 mFalseButton.setEnabled(false);
+
+                displayScore();
+
             }
         });
 
@@ -68,6 +70,8 @@ public class QuizActivity extends AppCompatActivity {
                 checkAnswer(false);
                 v.setEnabled(false);
                 mTrueButton.setEnabled(false);
+
+                displayScore();
             }
         });
 
@@ -77,13 +81,6 @@ public class QuizActivity extends AppCompatActivity {
             public void onClick (View v){
                 mCurrentIndex=(mCurrentIndex+1)% mQuestionBank.length;
                 updateQuestion();
-
-                if(mCurrentIndex==(mQuestionBank.length-1) && !mTrueButton.isEnabled() ) {
-                    double score=(mCorrectAnsCount/(double)mQuestionBank.length)*100;
-                    String mScore = String.valueOf((mCorrectAnsCount/(double)mQuestionBank.length)*100);
-                    Toast.makeText(getApplicationContext(), mScore, Toast.LENGTH_SHORT).show();
-                    mCorrectAnsCount=0;
-                }
 
                 mFalseButton.setEnabled(true);
                 mTrueButton.setEnabled(true);
@@ -142,6 +139,15 @@ public class QuizActivity extends AppCompatActivity {
             messageResId=R.string.incorrect_toast;
 
         Toast.makeText(this,messageResId, LENGTH_SHORT).show();
+    }
+
+    private void displayScore(){
+        if(mCurrentIndex==mQuestionBank.length-1) {
+            String mScore = String.valueOf((mCorrectAnsCount / (double) mQuestionBank.length) * 100);
+            Toast.makeText(getApplicationContext(), mScore, Toast.LENGTH_SHORT).show();
+            mCorrectAnsCount=0;
+        }
+
     }
 
 }
